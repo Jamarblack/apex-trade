@@ -197,9 +197,9 @@ export function TradingConsole({
                     {autoTrade ? "executing on signal" : "manual approval required"}
                   </div>
                 </div>
-                <Zap
+                {/* <Zap
                   className={`ml-auto size-4 ${autoTrade ? "text-[color:var(--sol-green)]" : "text-foreground/30"}`}
-                />
+                /> */}
               </div>
             </button>
           </div>

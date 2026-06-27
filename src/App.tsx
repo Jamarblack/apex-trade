@@ -181,6 +181,8 @@ export default function App() {
         onNetwork={setNetwork}
         onLeft={() => setLeftOpen(true)}
         onRight={() => setRightOpen(true)}
+        walletModalOpen={walletModalOpen}
+        onWalletModalOpen={setWalletModalOpen}
       />
 
       <main className="mx-auto w-full max-w-[1600px] px-3 pb-24 pt-4 sm:px-6 lg:pb-10">

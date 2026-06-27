@@ -35,6 +35,8 @@ export function TopNav({
   onNetwork,
   onLeft,
   onRight,
+  walletModalOpen,
+  onWalletModalOpen,
 }: {
   network: NetworkId;
   walletConnected: boolean;
@@ -42,6 +44,8 @@ export function TopNav({
   onNetwork: (n: NetworkId) => void;
   onLeft: () => void;
   onRight: () => void;
+  walletModalOpen: boolean;
+  onWalletModalOpen: (open: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -49,13 +53,13 @@ export function TopNav({
   // Wallet State
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const meta = NETWORK_META[network];
 
   // Native Web3 Connection Logic
   const connectWallet = async () => {
     if (walletAddress) {
-
       setWalletAddress(null);
       onWalletChange(false);
       return;
@@ -71,7 +75,10 @@ export function TopNav({
           setWalletAddress(address);
           onWalletChange(true);
         } else {
-          alert("Phantom wallet extension not detected. Please install it.");
+          setModalMessage(
+            "Phantom wallet extension not detected. On mobile? Copy this link and paste it in your Phantom mobile app's browser to connect."
+          );
+          onWalletModalOpen(true);
         }
       } else if (network === "base") {
         const provider = (window as any).ethereum;
@@ -80,7 +87,10 @@ export function TopNav({
           setWalletAddress(accounts[0]);
           onWalletChange(true);
         } else {
-          alert("MetaMask or Coinbase Wallet not detected. Please install one.");
+          setModalMessage(
+            "MetaMask or Coinbase Wallet not detected. On mobile? Copy this link and paste it in your wallet app's browser to connect."
+          );
+          onWalletModalOpen(true);
         }
       }
     } catch (error) {

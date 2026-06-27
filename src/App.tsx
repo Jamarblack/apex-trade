@@ -19,18 +19,17 @@ import { ExecutionLog } from "@/components/ExecutionLog";
 import { TradingConsole } from "@/components/TradingConsole";
 import { Drawer } from "@/components/Drawer";
 
-const API = "http://localhost:5000";
+const API = "https://apex-trade-bc4l.onrender.com";
 
 export default function App() {
   const [network, setNetwork] = useState<NetworkId>("solana");
 
   // ── Wallet State ─────────────────────────────────────────────────────────
-  // TODO: Replace this with your actual wallet hook! 
+  // TODO: Replace this with your actual wallet hook!
   // Example (Solana): const { connected: walletConnected } = useWallet();
   // Example (Base): const { isConnected: walletConnected } = useAccount();
-  const [walletConnected, setWalletConnected] = useState(false); 
+  const [walletConnected, setWalletConnected] = useState(false);
 
-  // ── Seed ALL state immediately so UI is never blank ──────────────────────
   const [predictions, setPredictions] = useState<Prediction[]>(seedPredictions(8));
   const [kpis, setKpis] = useState<Kpi[]>(seedKpis());
   const [series, setSeries] = useState(seedSeries(60));
@@ -42,7 +41,7 @@ export default function App() {
   const [leftOpen, setLeftOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
 
-  // ── 1. Live AI prediction feed — polls every 5 s ─────────────────────────
+  // ── 1. Live AI prediction feed
   useEffect(() => {
     let alive = true;
 
@@ -60,10 +59,13 @@ export default function App() {
 
     fetchPrediction();
     const t = setInterval(fetchPrediction, 5000);
-    return () => { alive = false; clearInterval(t); };
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
   }, []);
 
-  // ── 2. Live market ticks — polls every 1 s ───────────────────────────────
+  // ── 2. Live market ticks
   useEffect(() => {
     let alive = true;
 
@@ -77,11 +79,11 @@ export default function App() {
         setKpis(data.kpis);
 
         setSeries((prev) => {
-          const solKpi  = data.kpis.find((k: Kpi) => k.asset === "SOL");
+          const solKpi = data.kpis.find((k: Kpi) => k.asset === "SOL");
           const baseKpi = data.kpis.find((k: Kpi) => k.asset === "BASE");
 
           const lastPoint = prev[prev.length - 1];
-          const solPrice  = Number(solKpi?.price)  || lastPoint?.sol  || 184.27;
+          const solPrice = Number(solKpi?.price) || lastPoint?.sol || 184.27;
           const basePrice = Number(baseKpi?.price) || lastPoint?.base || 1.0021;
 
           const next = {
@@ -91,23 +93,26 @@ export default function App() {
               minute: "2-digit",
               second: "2-digit",
             }),
-            sol:  +solPrice.toFixed(2),
+            sol: +solPrice.toFixed(2),
             base: +basePrice.toFixed(4),
           };
 
           return [...prev.slice(-59), next];
         });
       } catch {
-        // backend offline — series keeps its last value, chart stays visible
+        // backend offline
       }
     };
 
     fetchTicks();
     const t = setInterval(fetchTicks, 1000);
-    return () => { alive = false; clearInterval(t); };
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
   }, []);
 
-  // ── 3. Auto-trade — fires every 6 s when armed ───────────────────────────
+  // ── 3. Auto-trade
   useEffect(() => {
     if (!autoTrade) return;
     let alive = true;
@@ -131,7 +136,10 @@ export default function App() {
     };
 
     const t = setInterval(executeTrade, 6000);
-    return () => { alive = false; clearInterval(t); };
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
   }, [autoTrade, risk, network]);
 
   // ── 4. Force trade (immediate) ───────────────────────────────────────────
@@ -202,10 +210,20 @@ export default function App() {
         </div>
       </main>
 
-      <Drawer side="left" open={leftOpen} onClose={() => setLeftOpen(false)} title="AI Prediction Stream">
+      <Drawer
+        side="left"
+        open={leftOpen}
+        onClose={() => setLeftOpen(false)}
+        title="AI Prediction Stream"
+      >
         <PredictionStream predictions={predictions} />
       </Drawer>
-      <Drawer side="right" open={rightOpen} onClose={() => setRightOpen(false)} title="Trading Agent">
+      <Drawer
+        side="right"
+        open={rightOpen}
+        onClose={() => setRightOpen(false)}
+        title="Trading Agent"
+      >
         <TradingConsole
           autoTrade={autoTrade}
           setAutoTrade={setAutoTrade}

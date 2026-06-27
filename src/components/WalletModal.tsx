@@ -19,11 +19,7 @@ export function WalletModal({
   if (!isOpen) return null;
 
   const bgColor =
-    type === "error"
-      ? "bg-red-950/40"
-      : type === "warning"
-        ? "bg-yellow-950/40"
-        : "bg-blue-950/40";
+    type === "error" ? "bg-red-950/40" : type === "warning" ? "bg-yellow-950/40" : "bg-blue-950/40";
 
   const borderColor =
     type === "error"
@@ -33,14 +29,9 @@ export function WalletModal({
         : "border-blue-900/50";
 
   const accentColor =
-    type === "error"
-      ? "text-red-400"
-      : type === "warning"
-        ? "text-yellow-400"
-        : "text-blue-400";
+    type === "error" ? "text-red-400" : type === "warning" ? "text-yellow-400" : "text-blue-400";
 
-  const currentUrl =
-    typeof window !== "undefined" ? window.location.href : "";
+  const currentUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
@@ -74,9 +65,7 @@ export function WalletModal({
         </div>
 
         {/* Message */}
-        <p className="mb-6 text-sm text-foreground/80 leading-relaxed">
-          {message}
-        </p>
+        <p className="mb-6 text-sm text-foreground/80 leading-relaxed">{message}</p>
 
         {/* Mobile wallet instructions */}
         <div className="mb-6 rounded-md bg-white/5 p-4 border border-white/10">
@@ -85,16 +74,14 @@ export function WalletModal({
           </p>
           <ol className="space-y-2 text-xs text-foreground/70">
             <li>
-              <span className="font-semibold text-foreground">1.</span> Copy
-              this link
+              <span className="font-semibold text-foreground">1.</span> Copy this link
             </li>
             <li>
-              <span className="font-semibold text-foreground">2.</span> Open
-              your wallet browser (Phantom, Solflare, MetaMask, Trustwallet etc.)
+              <span className="font-semibold text-foreground">2.</span> Open your wallet browser
+              (Phantom, MetaMask, Trustwallet etc.)
             </li>
             <li>
-              <span className="font-semibold text-foreground">3.</span> Paste &
-              connect
+              <span className="font-semibold text-foreground">3.</span> Paste & connect
             </li>
           </ol>
         </div>

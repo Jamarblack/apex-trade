@@ -90,7 +90,7 @@ export function WalletModal({
             </li>
             <li>
               <span className="font-semibold text-foreground">2.</span> Open
-              your wallet browser (Phantom, Magic Eden, etc.)
+              your wallet browser (Phantom, Solflare, MetaMask, Trustwallet etc.)
             </li>
             <li>
               <span className="font-semibold text-foreground">3.</span> Paste &

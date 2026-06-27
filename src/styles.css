@@ -1,21 +1,12 @@
 @import "tailwindcss" source(none);
-@source "../src";
 @import "tw-animate-css";
+@source "../src";
+
 
 @custom-variant dark (&:is(.dark *));
 
 /*
  * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
  */
 
 @theme inline {
@@ -46,11 +37,6 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -73,7 +59,49 @@
 
 :root {
   --radius: 0.5rem;
-  /* Apex Trade — institutional matte black */
+  
+  /* LIGHT MODE - Institutional Clean */
+  --background: oklch(0.98 0 0);          /* Very light gray/white */
+  --foreground: oklch(0.12 0 0);          /* Dark text */
+  --bone: oklch(0.12 0 0);
+  --surface: oklch(1 0 0);                /* Pure white cards */
+  --surface-2: oklch(0.96 0 0);           /* Slightly offset white */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.12 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.12 0 0);
+  --primary: oklch(0.12 0 0);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.92 0 0);
+  --secondary-foreground: oklch(0.12 0 0);
+  --muted: oklch(0.92 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.92 0 0);
+  --accent-foreground: oklch(0.12 0 0);
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0 0 0 / 8%);            /* Dark border with low opacity */
+  --input: oklch(0 0 0 / 8%);
+  --ring: oklch(0.7 0.18 280);
+  --sidebar: oklch(0.98 0 0);
+  --sidebar-foreground: oklch(0.12 0 0);
+  --sidebar-primary: oklch(0.12 0 0);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.92 0 0);
+  --sidebar-accent-foreground: oklch(0.12 0 0);
+  --sidebar-border: oklch(0 0 0 / 8%);
+  --sidebar-ring: oklch(0.7 0.18 280);
+
+  /* BRAND ACCENTS - Identical across both modes */
+  --sol-purple: #9945FF;
+  --sol-green: #14F195;
+  --base-blue: #0052FF;
+  --bull: #14F195;
+  --bear: #FF4D6D;
+}
+
+.dark {
+  /* DARK MODE - Stealth-Tech Black */
   --background: oklch(0.07 0 0);          /* #0A0A0A */
   --foreground: oklch(0.96 0 0);          /* bone white */
   --bone: oklch(0.96 0 0);
@@ -91,25 +119,8 @@
   --muted-foreground: oklch(0.62 0 0);
   --accent: oklch(0.16 0 0);
   --accent-foreground: oklch(0.96 0 0);
-  --destructive: oklch(0.62 0.22 25);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(1 0 0 / 6%);
+  --border: oklch(1 0 0 / 6%);            /* White border with low opacity */
   --input: oklch(1 0 0 / 8%);
-  --ring: oklch(0.7 0.18 280);
-
-  /* Brand accents */
-  --sol-purple: #9945FF;
-  --sol-green: #14F195;
-  --base-blue: #0052FF;
-  --bull: #14F195;
-  --bear: #FF4D6D;
-
-  --chart-1: #9945FF;
-  --chart-2: #14F195;
-  --chart-3: #0052FF;
-  --chart-4: #FF4D6D;
-  --chart-5: oklch(0.7 0.18 280);
-
   --sidebar: oklch(0.08 0 0);
   --sidebar-foreground: oklch(0.96 0 0);
   --sidebar-primary: oklch(0.96 0 0);
@@ -117,53 +128,4 @@
   --sidebar-accent: oklch(0.16 0 0);
   --sidebar-accent-foreground: oklch(0.96 0 0);
   --sidebar-border: oklch(1 0 0 / 6%);
-  --sidebar-ring: oklch(0.7 0.18 280);
-}
-
-.dark {
-  /* App is permanently dark — keep tokens identical to :root */
-}
-
-@layer base {
-  * {
-    border-color: var(--color-border);
-  }
-
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
-    -webkit-font-smoothing: antialiased;
-  }
-  .font-mono, code, kbd, pre, samp {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-@utility glow-sol {
-  box-shadow: 0 0 0 1px color-mix(in oklab, #14F195 40%, transparent),
-              0 0 24px -4px color-mix(in oklab, #14F195 55%, transparent);
-}
-@utility glow-base {
-  box-shadow: 0 0 0 1px color-mix(in oklab, #0052FF 50%, transparent),
-              0 0 24px -4px color-mix(in oklab, #0052FF 60%, transparent);
-}
-@utility glow-purple {
-  box-shadow: 0 0 0 1px color-mix(in oklab, #9945FF 45%, transparent),
-              0 0 28px -4px color-mix(in oklab, #9945FF 60%, transparent);
-}
-
-@utility pulse-live {
-  animation: apex-pulse 2.2s ease-in-out infinite;
-}
-@keyframes apex-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, #14F195 45%, transparent); }
-  50%      { box-shadow: 0 0 0 6px color-mix(in oklab, #14F195 0%, transparent); }
-}
-
-@utility scanline {
-  background-image: linear-gradient(transparent 50%, rgba(255,255,255,0.015) 50%);
-  background-size: 100% 4px;
 }

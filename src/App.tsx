@@ -174,6 +174,8 @@ export default function App() {
       />
       <TopNav
         network={network}
+        walletConnected={walletConnected}
+        onWalletChange={setWalletConnected} // ✅ FIXED: Pass the state setter function!
         onNetwork={setNetwork}
         onLeft={() => setLeftOpen(true)}
         onRight={() => setRightOpen(true)}

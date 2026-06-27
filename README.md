@@ -1,4 +1,4 @@
-# 🚀 APEX·TRADE
+# APEX·TRADE
 
 > **Submission for Hackathon 2026** > A high-performance, AI-driven Web3 trading terminal and autonomous market execution engine supporting multi-chain operations across Solana and Base networks.
 
@@ -7,13 +7,13 @@ Live Backend API: [https://apex-trade-bc4l.onrender.com](https://apex-trade-bc4l
 
 ---
 
-## 💡 Overview
+## Overview
 
 **APEX·TRADE** bridges the gap between decentralized finance (DeFi) on-chain activity and real-time artificial intelligence. Built from the ground up over a high-intensity hackathon sprint, the platform combines a lightning-fast UI terminal with a dedicated backend execution engine. It allows users to monitor live price ticks, consume real-time AI trading signals generated via the Gemini API, and interface natively with Web3 wallets to prepare for automated execution.
 
 ---
 
-## 🛠️ Architecture & Tech Stack
+## Architecture & Tech Stack
 
 The project is structured as a decoupled monorepo optimized for seamless production delivery:
 
@@ -23,7 +23,7 @@ The project is structured as a decoupled monorepo optimized for seamless product
 
 ---
 
-## 🌟 Current Capabilities (What It Can Do)
+##  Current Capabilities (What It Can Do)
 
 ### 1. Multi-Chain Native Wallet Architecture
 * Implements native, client-side cryptographic wallet discovery.
@@ -44,7 +44,7 @@ The project is structured as a decoupled monorepo optimized for seamless product
 
 ---
 
-## ⚠️ Current Limitations (What It Cannot Do Yet)
+## Current Limitations (What It Cannot Do Yet)
 
 As a rapid hackathon prototype, certain deep-infrastructure features are simulated or mocked to showcase the user experience flow:
 * **On-Chain Transaction Settlement:** While the application connects natively to your Web3 wallet and extracts public authorization keys, it does not broadcast raw signed transactions to mainnet RPC nodes yet.
@@ -53,7 +53,7 @@ As a rapid hackathon prototype, certain deep-infrastructure features are simulat
 
 ---
 
-## 🔮 Production Roadmap (Expectations for a Big Project)
+## Production Roadmap (Expectations for a Big Project)
 
 If scaled beyond a hackathon prototype into an enterprise-grade dApp, APEX·TRADE will implement the following production-grade milestones:
 
@@ -71,7 +71,7 @@ If scaled beyond a hackathon prototype into an enterprise-grade dApp, APEX·TRAD
 
 ---
 
-## ⚡ Quickstart (Local Development)
+## Quickstart (Local Development)
 
 ### Repository Setup
 ```bash

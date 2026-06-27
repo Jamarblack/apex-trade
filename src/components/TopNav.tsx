@@ -55,7 +55,7 @@ export function TopNav({
   // Native Web3 Connection Logic
   const connectWallet = async () => {
     if (walletAddress) {
-      // If already connected, click acts as disconnect for the demo
+
       setWalletAddress(null);
       onWalletChange(false);
       return;
@@ -156,7 +156,7 @@ export function TopNav({
                         key={n}
                         onClick={() => {
                           onNetwork(n);
-                          setWalletAddress(null); // Auto-disconnect when switching chains
+                          setWalletAddress(null);
                           onWalletChange(false);
                           setOpen(false);
                         }}

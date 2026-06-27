@@ -8,7 +8,6 @@ function ConfidenceRing({ value, color }: { value: number; color: string }) {
   return (
     <div className="relative grid size-10 shrink-0 place-items-center">
       <svg width={40} height={40} className="-rotate-90">
-        {/* Track circle updated to use theme border color */}
         <circle cx={20} cy={20} r={r} stroke="var(--border)" strokeWidth={3} fill="none" />
         <circle 
           cx={20} 
@@ -64,8 +63,6 @@ export function PredictionStream({ predictions }: { predictions: Prediction[] })
         </div>
         <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">live · {predictions.length}</span>
       </div>
-      
-      {/* Scrollbar hidden here using Tailwind arbitrary variants while retaining overflow-y-auto */}
       <div className="scanline relative max-h-[680px] flex-1 overflow-y-auto px-2 py-2 lg:max-h-[760px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <ul className="space-y-1.5">
           {predictions.map((p, i) => (

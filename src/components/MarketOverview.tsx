@@ -10,7 +10,7 @@ function Stat({ label, value, tone }: { label: string; value: string; tone?: "bu
       ? "text-[color:var(--bull)]"
       : tone === "bear"
         ? "text-[color:var(--bear)]"
-        : "text-foreground"; // Theme fixed
+        : "text-foreground";
   return (
     <div>
       <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">{label}</div>
@@ -36,7 +36,6 @@ function KpiCard({ k, active, onClick }: { k: Kpi; active: boolean; onClick: () 
         />
       )}
       <div className="flex items-center gap-2">
-        {/* Changed background to dynamically flip between black/white based on theme for better logo contrast */}
         <span className="grid size-5 place-items-center rounded-[4px] bg-black dark:bg-black overflow-hidden border border-border/50">
           <img 
             src={isSol ? sol : base} 

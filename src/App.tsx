@@ -18,6 +18,7 @@ import { KpiRow, ChartCard } from "@/components/MarketOverview";
 import { ExecutionLog } from "@/components/ExecutionLog";
 import { TradingConsole } from "@/components/TradingConsole";
 import { Drawer } from "@/components/Drawer";
+import { WalletModal } from "@/components/WalletModal";
 
 const API = "https://apex-trade-bc4l.onrender.com";
 
@@ -29,6 +30,7 @@ export default function App() {
   // Example (Solana): const { connected: walletConnected } = useWallet();
   // Example (Base): const { isConnected: walletConnected } = useAccount();
   const [walletConnected, setWalletConnected] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
 
   const [predictions, setPredictions] = useState<Prediction[]>(seedPredictions(8));
   const [kpis, setKpis] = useState<Kpi[]>(seedKpis());
@@ -175,7 +177,7 @@ export default function App() {
       <TopNav
         network={network}
         walletConnected={walletConnected}
-        onWalletChange={setWalletConnected} 
+        onWalletChange={setWalletConnected}
         onNetwork={setNetwork}
         onLeft={() => setLeftOpen(true)}
         onRight={() => setRightOpen(true)}
@@ -253,6 +255,14 @@ export default function App() {
           </button>
         </div>
       </nav>
+
+      {/* Wallet Connection Modal */}
+      <WalletModal
+        isOpen={walletModalOpen}
+        onClose={() => setWalletModalOpen(false)}
+        message="On mobile? Copy this link and paste it in your wallet app's browser (Phantom, Magic Eden, etc.) to connect seamlessly."
+        type="info"
+      />
     </div>
   );
 }

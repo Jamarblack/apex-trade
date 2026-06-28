@@ -2,9 +2,7 @@
 @import "tw-animate-css";
 @source "../src";
 
-
 @custom-variant dark (&:is(.dark *));
-
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -56,13 +54,13 @@
 
 :root {
   --radius: 0.5rem;
-  
+
   /* LIGHT MODE - Institutional Clean */
-  --background: oklch(0.98 0 0);          /* Very light gray/white */
-  --foreground: oklch(0.12 0 0);          /* Dark text */
+  --background: oklch(0.98 0 0); /* Very light gray/white */
+  --foreground: oklch(0.12 0 0); /* Dark text */
   --bone: oklch(0.12 0 0);
-  --surface: oklch(1 0 0);                /* Pure white cards */
-  --surface-2: oklch(0.96 0 0);           /* Slightly offset white */
+  --surface: oklch(1 0 0); /* Pure white cards */
+  --surface-2: oklch(0.96 0 0); /* Slightly offset white */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.12 0 0);
   --popover: oklch(1 0 0);
@@ -77,7 +75,7 @@
   --accent-foreground: oklch(0.12 0 0);
   --destructive: oklch(0.62 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0 0 0 / 8%);            /* Dark border with low opacity */
+  --border: oklch(0 0 0 / 8%); /* Dark border with low opacity */
   --input: oklch(0 0 0 / 8%);
   --ring: oklch(0.7 0.18 280);
   --sidebar: oklch(0.98 0 0);
@@ -90,23 +88,23 @@
   --sidebar-ring: oklch(0.7 0.18 280);
 
   /* BRAND ACCENTS - Identical across both modes */
-  --sol-purple: #9945FF;
-  --sol-green: #14F195;
-  --base-blue: #0052FF;
-  --bull: #14F195;
-  --bear: #FF4D6D;
+  --sol-purple: #9945ff;
+  --sol-green: #14f195;
+  --base-blue: #0052ff;
+  --bull: #14f195;
+  --bear: #ff4d6d;
 }
 
 .dark {
   /* DARK MODE - Stealth-Tech Black */
-  --background: oklch(0.07 0 0);          /* #0A0A0A */
-  --foreground: oklch(0.96 0 0);          /* bone white */
+  --background: oklch(0.07 0 0); /* #0A0A0A */
+  --foreground: oklch(0.96 0 0); /* bone white */
   --bone: oklch(0.96 0 0);
-  --surface: oklch(0.10 0 0);             /* #121212 */
+  --surface: oklch(0.1 0 0); /* #121212 */
   --surface-2: oklch(0.13 0 0);
-  --card: oklch(0.10 0 0);
+  --card: oklch(0.1 0 0);
   --card-foreground: oklch(0.96 0 0);
-  --popover: oklch(0.10 0 0);
+  --popover: oklch(0.1 0 0);
   --popover-foreground: oklch(0.96 0 0);
   --primary: oklch(0.96 0 0);
   --primary-foreground: oklch(0.07 0 0);
@@ -116,7 +114,7 @@
   --muted-foreground: oklch(0.62 0 0);
   --accent: oklch(0.16 0 0);
   --accent-foreground: oklch(0.96 0 0);
-  --border: oklch(1 0 0 / 6%);            /* White border with low opacity */
+  --border: oklch(1 0 0 / 6%); /* White border with low opacity */
   --input: oklch(1 0 0 / 8%);
   --sidebar: oklch(0.08 0 0);
   --sidebar-foreground: oklch(0.96 0 0);

@@ -114,7 +114,10 @@ export function seedExecutions(n = 9): ExecutionRow[] {
       asset,
       action: Math.random() > 0.5 ? "BUY" : "SELL",
       amount: +(Math.random() * (asset === "SOL" ? 12 : 4200)).toFixed(2),
-      price: asset === "SOL" ? +(180 + Math.random() * 8).toFixed(2) : +(1 + Math.random() * 0.01).toFixed(4),
+      price:
+        asset === "SOL"
+          ? +(180 + Math.random() * 8).toFixed(2)
+          : +(1 + Math.random() * 0.01).toFixed(4),
       txHash: shortHash(),
     };
   });
@@ -128,7 +131,8 @@ export function makeExecution(asset?: Asset, action?: "BUY" | "SELL"): Execution
     asset: a,
     action: action ?? (Math.random() > 0.5 ? "BUY" : "SELL"),
     amount: +(Math.random() * (a === "SOL" ? 12 : 4200)).toFixed(2),
-    price: a === "SOL" ? +(180 + Math.random() * 8).toFixed(2) : +(1 + Math.random() * 0.01).toFixed(4),
+    price:
+      a === "SOL" ? +(180 + Math.random() * 8).toFixed(2) : +(1 + Math.random() * 0.01).toFixed(4),
     txHash: shortHash(),
   };
 }

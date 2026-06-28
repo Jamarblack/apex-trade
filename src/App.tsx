@@ -19,7 +19,7 @@ import { TradingConsole } from "@/components/TradingConsole";
 import { Drawer } from "@/components/Drawer";
 import { WalletModal } from "@/components/WalletModal";
 import { useExecutionHistory } from "@/hooks/useExecutionHistory";
-import { Analytics } from "@vercel/analytics/react";
+
 
 const API = "https://apex-trade-bc4l.onrender.com";
 
@@ -31,7 +31,7 @@ export default function App() {
   const [walletAddress, setWalletAddress]     = useState<string | null>(null);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
 
-  // ── Supabase-backed execution history ────────────────────────────────────
+
   const { executions, loading, addExecution, clearHistory } =
     useExecutionHistory(walletAddress, network);
 
@@ -94,7 +94,7 @@ export default function App() {
     return () => { alive = false; clearInterval(t); };
   }, []);
 
-  // ── 3. Auto-trade ─────────────────────────────────────────────────────────
+  // ── 3. Auto-trade
   useEffect(() => {
     if (!autoTrade) return;
     let alive = true;
@@ -119,7 +119,7 @@ export default function App() {
     return () => { alive = false; clearInterval(t); };
   }, [autoTrade, risk, network]);
 
-  // ── 4. Force trade ────────────────────────────────────────────────────────
+
   const forceTrade = async (action: "BUY" | "SELL") => {
     try {
       const res = await fetch(`${API}/api/agent/execute`, {
@@ -136,13 +136,11 @@ export default function App() {
     addExecution(makeExecution(undefined, action));
   };
 
-  // ── Wallet connect/disconnect ─────────────────────────────────────────────
   const handleWalletChange = (connected: boolean, address?: string) => {
     setWalletConnected(connected);
     setWalletAddress(connected && address ? address : null);
   };
 
-  // ─────────────────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-[color:var(--sol-purple)]/40">
       <div
@@ -238,7 +236,7 @@ export default function App() {
         message="On mobile? Copy this link and paste it in your wallet app's browser (Phantom, MetaMask, Trustwallet etc.) to connect seamlessly."
         type="info"
       />
-      <Analytics />
+      
     </div>
   );
 }

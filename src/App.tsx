@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Bot, Sparkles } from "lucide-react";
 import {
   type Asset,
-  type ExecutionRow,
   type Kpi,
   type NetworkId,
   type Prediction,
@@ -19,34 +18,36 @@ import { ExecutionLog } from "@/components/ExecutionLog";
 import { TradingConsole } from "@/components/TradingConsole";
 import { Drawer } from "@/components/Drawer";
 import { WalletModal } from "@/components/WalletModal";
+import { useExecutionHistory } from "@/hooks/useExecutionHistory";
+import { Analytics } from "@vercel/analytics/react";
 
 const API = "https://apex-trade-bc4l.onrender.com";
 
 export default function App() {
   const [network, setNetwork] = useState<NetworkId>("solana");
 
-  // ── Wallet State ─────────────────────────────────────────────────────────
-  // TODO: Replace this with your actual wallet hook!
-  // Example (Solana): const { connected: walletConnected } = useWallet();
-  // Example (Base): const { isConnected: walletConnected } = useAccount();
+  // ── Wallet State ──────────────────────────────────────────────────────────
   const [walletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress]     = useState<string | null>(null);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
 
+  // ── Supabase-backed execution history ────────────────────────────────────
+  const { executions, loading, addExecution, clearHistory } =
+    useExecutionHistory(walletAddress, network);
+
   const [predictions, setPredictions] = useState<Prediction[]>(seedPredictions(8));
-  const [kpis, setKpis] = useState<Kpi[]>(seedKpis());
-  const [series, setSeries] = useState(seedSeries(60));
-  const [executions, setExecutions] = useState<ExecutionRow[]>([]);
+  const [kpis, setKpis]               = useState<Kpi[]>(seedKpis());
+  const [series, setSeries]           = useState(seedSeries(60));
 
   const [autoTrade, setAutoTrade] = useState(false);
-  const [risk, setRisk] = useState(25);
+  const [risk, setRisk]           = useState(25);
   const [activeChart, setActiveChart] = useState<Asset>("SOL");
-  const [leftOpen, setLeftOpen] = useState(false);
+  const [leftOpen, setLeftOpen]   = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
 
-  // ── 1. Live AI prediction feed
+  // ── 1. Live AI prediction feed ────────────────────────────────────────────
   useEffect(() => {
     let alive = true;
-
     const fetchPrediction = async () => {
       try {
         const res = await fetch(`${API}/api/predictions/stream`);
@@ -54,71 +55,49 @@ export default function App() {
         const p: Prediction = await res.json();
         if (!alive || !p?.asset) return;
         setPredictions((prev) => [{ ...p, ts: Date.now() }, ...prev].slice(0, 14));
-      } catch {
-        // backend offline — keep showing seeded predictions, no crash
-      }
+      } catch {}
     };
-
     fetchPrediction();
     const t = setInterval(fetchPrediction, 5000);
-    return () => {
-      alive = false;
-      clearInterval(t);
-    };
+    return () => { alive = false; clearInterval(t); };
   }, []);
 
-  // ── 2. Live market ticks
+  // ── 2. Live market ticks ──────────────────────────────────────────────────
   useEffect(() => {
     let alive = true;
-
     const fetchTicks = async () => {
       try {
         const res = await fetch(`${API}/api/markets/ticks`);
         if (!res.ok) return;
         const data = await res.json();
         if (!alive || !Array.isArray(data.kpis)) return;
-
         setKpis(data.kpis);
-
         setSeries((prev) => {
-          const solKpi = data.kpis.find((k: Kpi) => k.asset === "SOL");
+          const solKpi  = data.kpis.find((k: Kpi) => k.asset === "SOL");
           const baseKpi = data.kpis.find((k: Kpi) => k.asset === "BASE");
-
           const lastPoint = prev[prev.length - 1];
-          const solPrice = Number(solKpi?.price) || lastPoint?.sol || 184.27;
+          const solPrice  = Number(solKpi?.price)  || lastPoint?.sol  || 184.27;
           const basePrice = Number(baseKpi?.price) || lastPoint?.base || 1.0021;
-
           const next = {
             t: new Date().toLocaleTimeString("en-US", {
-              hour12: false,
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
+              hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit",
             }),
-            sol: +solPrice.toFixed(2),
+            sol:  +solPrice.toFixed(2),
             base: +basePrice.toFixed(4),
           };
-
           return [...prev.slice(-59), next];
         });
-      } catch {
-        // backend offline
-      }
+      } catch {}
     };
-
     fetchTicks();
     const t = setInterval(fetchTicks, 1000);
-    return () => {
-      alive = false;
-      clearInterval(t);
-    };
+    return () => { alive = false; clearInterval(t); };
   }, []);
 
-  // ── 3. Auto-trade
+  // ── 3. Auto-trade ─────────────────────────────────────────────────────────
   useEffect(() => {
     if (!autoTrade) return;
     let alive = true;
-
     const executeTrade = async () => {
       try {
         const res = await fetch(`${API}/api/agent/execute`, {
@@ -129,22 +108,18 @@ export default function App() {
         const data = await res.json();
         if (!alive) return;
         if (data.success && data.execution) {
-          setExecutions((prev) => [data.execution, ...prev].slice(0, 30));
+          addExecution(data.execution);
         }
       } catch {
         if (!alive) return;
-        setExecutions((prev) => [makeExecution(), ...prev].slice(0, 30));
+        addExecution(makeExecution());
       }
     };
-
     const t = setInterval(executeTrade, 6000);
-    return () => {
-      alive = false;
-      clearInterval(t);
-    };
+    return () => { alive = false; clearInterval(t); };
   }, [autoTrade, risk, network]);
 
-  // ── 4. Force trade (immediate) ───────────────────────────────────────────
+  // ── 4. Force trade ────────────────────────────────────────────────────────
   const forceTrade = async (action: "BUY" | "SELL") => {
     try {
       const res = await fetch(`${API}/api/agent/execute`, {
@@ -154,13 +129,17 @@ export default function App() {
       });
       const data = await res.json();
       if (data.success && data.execution) {
-        setExecutions((prev) => [data.execution, ...prev].slice(0, 30));
+        addExecution(data.execution);
         return;
       }
-    } catch {
-      // fall through to local fallback
-    }
-    setExecutions((prev) => [makeExecution(undefined, action), ...prev].slice(0, 30));
+    } catch {}
+    addExecution(makeExecution(undefined, action));
+  };
+
+  // ── Wallet connect/disconnect ─────────────────────────────────────────────
+  const handleWalletChange = (connected: boolean, address?: string) => {
+    setWalletConnected(connected);
+    setWalletAddress(connected && address ? address : null);
   };
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -177,7 +156,7 @@ export default function App() {
       <TopNav
         network={network}
         walletConnected={walletConnected}
-        onWalletChange={setWalletConnected}
+        onWalletChange={handleWalletChange}
         onNetwork={setNetwork}
         onLeft={() => setLeftOpen(true)}
         onRight={() => setRightOpen(true)}
@@ -199,7 +178,12 @@ export default function App() {
               onSelect={setActiveChart}
               kpis={kpis}
             />
-            <ExecutionLog rows={executions} />
+            <ExecutionLog
+              rows={executions}
+              loading={loading}
+              walletAddress={walletAddress}
+              onClear={clearHistory}
+            />
           </section>
 
           <aside className="hidden lg:block">
@@ -216,20 +200,10 @@ export default function App() {
         </div>
       </main>
 
-      <Drawer
-        side="left"
-        open={leftOpen}
-        onClose={() => setLeftOpen(false)}
-        title="AI Prediction Stream"
-      >
+      <Drawer side="left" open={leftOpen} onClose={() => setLeftOpen(false)} title="AI Prediction Stream">
         <PredictionStream predictions={predictions} />
       </Drawer>
-      <Drawer
-        side="right"
-        open={rightOpen}
-        onClose={() => setRightOpen(false)}
-        title="Trading Agent"
-      >
+      <Drawer side="right" open={rightOpen} onClose={() => setRightOpen(false)} title="Trading Agent">
         <TradingConsole
           autoTrade={autoTrade}
           setAutoTrade={setAutoTrade}
@@ -258,13 +232,13 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Wallet Connection Modal */}
       <WalletModal
         isOpen={walletModalOpen}
         onClose={() => setWalletModalOpen(false)}
-        message="On mobile? Copy this link and paste it in your wallet app's browser (Phantom, Magic Eden, etc.) to connect seamlessly."
+        message="On mobile? Copy this link and paste it in your wallet app's browser (Phantom, MetaMask, Trustwallet etc.) to connect seamlessly."
         type="info"
       />
+      <Analytics />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Radio, ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { Radio, ArrowDownRight, ArrowUpRight, Trash2, Loader2 } from "lucide-react";
 import { type ExecutionRow, clockHHMMSS } from "@/lib/mockApi";
 import sol from "@/assets/sol.png";
 import base from "@/assets/base.jpeg";
@@ -14,7 +14,6 @@ function ExecutionRowItem({ r }: { r: ExecutionRow }) {
       </span>
 
       <span className="order-2 flex items-center gap-1.5 font-mono text-[11px] font-semibold text-foreground sm:order-none">
-       
         <span className="grid size-3.5 shrink-0 place-items-center overflow-hidden rounded-[3px] bg-black">
           <img
             src={r.asset === "SOL" ? sol : base}
@@ -51,21 +50,53 @@ function ExecutionRowItem({ r }: { r: ExecutionRow }) {
   );
 }
 
-export function ExecutionLog({ rows }: { rows: ExecutionRow[] }) {
+export function ExecutionLog({
+  rows,
+  loading = false,
+  walletAddress,
+  onClear,
+}: {
+  rows: ExecutionRow[];
+  loading?: boolean;
+  walletAddress: string | null;
+  onClear?: () => void;
+}) {
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-[color:var(--surface)]">
+      {/* Header */}
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <div className="flex items-center gap-2">
           <Radio className="size-3.5 text-foreground/55" />
           <h2 className="text-[12px] font-semibold tracking-[0.16em] text-foreground">
             EXECUTION LOG
           </h2>
+          {walletAddress && (
+            <span className="rounded-sm border border-white/10 bg-white/5 px-1.5 py-0.5 font-mono text-[9px] text-foreground/40">
+              {walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}
+            </span>
+          )}
         </div>
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">
-          last {rows.length} fills
-        </span>
+        <div className="flex items-center gap-3">
+          {loading ? (
+            <Loader2 className="size-3.5 animate-spin text-foreground/30" />
+          ) : (
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">
+              {rows.length} fills
+            </span>
+          )}
+          {rows.length > 0 && onClear && !loading && (
+            <button
+              onClick={onClear}
+              title="Clear history"
+              className="text-foreground/30 transition-colors hover:text-[color:var(--bear)]"
+            >
+              <Trash2 className="size-3.5" />
+            </button>
+          )}
+        </div>
       </div>
 
+      {/* Column headers */}
       <div className="hidden grid-cols-[90px_64px_72px_minmax(0,1fr)_120px] border-b border-border px-4 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40 sm:grid">
         <span>Time</span>
         <span>Asset</span>
@@ -74,11 +105,36 @@ export function ExecutionLog({ rows }: { rows: ExecutionRow[] }) {
         <span className="text-right">Tx</span>
       </div>
 
-      <ul className="divide-y divide-border">
-        {rows.map((r) => (
-          <ExecutionRowItem key={r.id} r={r} />
-        ))}
-      </ul>
+      {/* Loading skeleton */}
+      {loading ? (
+        <div className="space-y-px py-1">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-4 px-4 py-3">
+              <div className="h-2.5 w-16 animate-pulse rounded bg-white/5" />
+              <div className="h-2.5 w-10 animate-pulse rounded bg-white/5" />
+              <div className="h-2.5 w-10 animate-pulse rounded bg-white/5" />
+              <div className="h-2.5 flex-1 animate-pulse rounded bg-white/5" />
+            </div>
+          ))}
+        </div>
+      ) : rows.length === 0 ? (
+        /* Empty state */
+        <div className="flex flex-col items-center justify-center gap-2 py-12 text-center">
+          <Radio className="size-5 text-foreground/15" />
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/25">
+            {walletAddress
+              ? "No executions yet — use Auto-Trade or Force Buy/Sell"
+              : "Connect wallet to track & save executions"}
+          </p>
+        </div>
+      ) : (
+        /* Rows */
+        <ul className="max-h-[400px] divide-y divide-border overflow-y-auto">
+          {rows.map((r) => (
+            <ExecutionRowItem key={r.id} r={r} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

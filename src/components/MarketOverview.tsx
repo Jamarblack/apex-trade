@@ -13,7 +13,9 @@ function Stat({ label, value, tone }: { label: string; value: string; tone?: "bu
         : "text-foreground";
   return (
     <div>
-      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">{label}</div>
+      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">
+        {label}
+      </div>
       <div className={`mt-1 font-mono text-sm font-semibold ${color}`}>{value}</div>
     </div>
   );
@@ -37,10 +39,10 @@ function KpiCard({ k, active, onClick }: { k: Kpi; active: boolean; onClick: () 
       )}
       <div className="flex items-center gap-2">
         <span className="grid size-5 place-items-center rounded-[4px] bg-black dark:bg-black overflow-hidden border border-border/50">
-          <img 
-            src={isSol ? sol : base} 
-            alt={`${k.asset} logo`} 
-            className="size-3.5 object-contain" 
+          <img
+            src={isSol ? sol : base}
+            alt={`${k.asset} logo`}
+            className="size-3.5 object-contain"
           />
         </span>
         <span className="text-[11px] font-semibold tracking-[0.18em] text-foreground/80">
@@ -179,14 +181,24 @@ export function ChartCard({
             </defs>
             <XAxis
               dataKey="t"
-              tick={{ fill: "var(--foreground)", opacity: 0.5, fontSize: 10, fontFamily: "JetBrains Mono" }}
+              tick={{
+                fill: "var(--foreground)",
+                opacity: 0.5,
+                fontSize: 10,
+                fontFamily: "JetBrains Mono",
+              }}
               axisLine={false}
               tickLine={false}
               minTickGap={32}
             />
             <YAxis
               orientation="right"
-              tick={{ fill: "var(--foreground)", opacity: 0.5, fontSize: 10, fontFamily: "JetBrains Mono" }}
+              tick={{
+                fill: "var(--foreground)",
+                opacity: 0.5,
+                fontSize: 10,
+                fontFamily: "JetBrains Mono",
+              }}
               axisLine={false}
               tickLine={false}
               domain={["auto", "auto"]}

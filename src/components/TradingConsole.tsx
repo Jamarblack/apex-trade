@@ -126,7 +126,7 @@ export function TradingConsole({
   setRisk,
   onForce,
   network,
-  walletConnected = false, 
+  walletConnected = false,
 }: {
   autoTrade: boolean;
   setAutoTrade: (v: boolean) => void;
@@ -164,7 +164,7 @@ export function TradingConsole({
                 AI Execution
               </span>
             </div>
-  
+
             <button
               onClick={() => walletConnected && setAutoTrade(!autoTrade)}
               disabled={!walletConnected}

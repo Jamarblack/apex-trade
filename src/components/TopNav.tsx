@@ -76,7 +76,7 @@ export function TopNav({
           onWalletChange(true);
         } else {
           setModalMessage(
-            "Phantom wallet extension not detected. On mobile? Copy this link and paste it in your Phantom mobile app's browser to connect."
+            "Phantom wallet extension not detected. On mobile? Copy this link and paste it in your Phantom mobile app's browser to connect.",
           );
           onWalletModalOpen(true);
         }
@@ -88,7 +88,7 @@ export function TopNav({
           onWalletChange(true);
         } else {
           setModalMessage(
-            "MetaMask or Coinbase Wallet not detected. On mobile? Copy this link and paste it in your wallet app's browser to connect."
+            "MetaMask or Coinbase Wallet not detected. On mobile? Copy this link and paste it in your wallet app's browser to connect.",
           );
           onWalletModalOpen(true);
         }
@@ -120,9 +120,7 @@ export function TopNav({
             <div className="text-[13px] font-bold tracking-[0.18em] text-foreground">
               APEX<span className="text-foreground/40">·</span>TRADE
             </div>
-            <div className="mt-1 hidden font-mono text-[10px] uppercase tracking-[0.25em] text-foreground/40 sm:block">
-              
-            </div>
+            <div className="mt-1 hidden font-mono text-[10px] uppercase tracking-[0.25em] text-foreground/40 sm:block"></div>
           </div>
         </div>
 

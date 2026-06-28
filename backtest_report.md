@@ -16,9 +16,9 @@ Since the agent is live-streaming, we verified the strategy via:
 
 ## 3. Performance Metrics (Simulated)
 
-| Metric | Value |
-| :--- | :--- |
-| Trade Frequency | ~1 trade per 6 seconds |
-| Win Rate (Mock) | 64% |
-| Avg. Trade Duration | 15s - 60s |
+| Metric               | Value                          |
+| :------------------- | :----------------------------- |
+| Trade Frequency      | ~1 trade per 6 seconds         |
+| Win Rate (Mock)      | 64%                            |
+| Avg. Trade Duration  | 15s - 60s                      |
 | Risk-Adjusted Return | Positive (Market-Neutral Bias) |

@@ -28,21 +28,23 @@ export default function App() {
 
   // ── Wallet State ──────────────────────────────────────────────────────────
   const [walletConnected, setWalletConnected] = useState(false);
-  const [walletAddress, setWalletAddress]     = useState<string | null>(null);
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
 
   // ── Supabase-backed execution history ────────────────────────────────────
-  const { executions, loading, addExecution, clearHistory } =
-    useExecutionHistory(walletAddress, network);
+  const { executions, loading, addExecution, clearHistory } = useExecutionHistory(
+    walletAddress,
+    network,
+  );
 
   const [predictions, setPredictions] = useState<Prediction[]>(seedPredictions(8));
-  const [kpis, setKpis]               = useState<Kpi[]>(seedKpis());
-  const [series, setSeries]           = useState(seedSeries(60));
+  const [kpis, setKpis] = useState<Kpi[]>(seedKpis());
+  const [series, setSeries] = useState(seedSeries(60));
 
   const [autoTrade, setAutoTrade] = useState(false);
-  const [risk, setRisk]           = useState(25);
+  const [risk, setRisk] = useState(25);
   const [activeChart, setActiveChart] = useState<Asset>("SOL");
-  const [leftOpen, setLeftOpen]   = useState(false);
+  const [leftOpen, setLeftOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
 
   // ── 1. Live AI prediction feed ────────────────────────────────────────────
@@ -59,7 +61,10 @@ export default function App() {
     };
     fetchPrediction();
     const t = setInterval(fetchPrediction, 5000);
-    return () => { alive = false; clearInterval(t); };
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
   }, []);
 
   // ── 2. Live market ticks ──────────────────────────────────────────────────
@@ -73,16 +78,19 @@ export default function App() {
         if (!alive || !Array.isArray(data.kpis)) return;
         setKpis(data.kpis);
         setSeries((prev) => {
-          const solKpi  = data.kpis.find((k: Kpi) => k.asset === "SOL");
+          const solKpi = data.kpis.find((k: Kpi) => k.asset === "SOL");
           const baseKpi = data.kpis.find((k: Kpi) => k.asset === "BASE");
           const lastPoint = prev[prev.length - 1];
-          const solPrice  = Number(solKpi?.price)  || lastPoint?.sol  || 184.27;
+          const solPrice = Number(solKpi?.price) || lastPoint?.sol || 184.27;
           const basePrice = Number(baseKpi?.price) || lastPoint?.base || 1.0021;
           const next = {
             t: new Date().toLocaleTimeString("en-US", {
-              hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit",
+              hour12: false,
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
             }),
-            sol:  +solPrice.toFixed(2),
+            sol: +solPrice.toFixed(2),
             base: +basePrice.toFixed(4),
           };
           return [...prev.slice(-59), next];
@@ -91,7 +99,10 @@ export default function App() {
     };
     fetchTicks();
     const t = setInterval(fetchTicks, 1000);
-    return () => { alive = false; clearInterval(t); };
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
   }, []);
 
   // ── 3. Auto-trade ─────────────────────────────────────────────────────────
@@ -116,7 +127,10 @@ export default function App() {
       }
     };
     const t = setInterval(executeTrade, 6000);
-    return () => { alive = false; clearInterval(t); };
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
   }, [autoTrade, risk, network]);
 
   // ── 4. Force trade ────────────────────────────────────────────────────────
@@ -200,10 +214,20 @@ export default function App() {
         </div>
       </main>
 
-      <Drawer side="left" open={leftOpen} onClose={() => setLeftOpen(false)} title="AI Prediction Stream">
+      <Drawer
+        side="left"
+        open={leftOpen}
+        onClose={() => setLeftOpen(false)}
+        title="AI Prediction Stream"
+      >
         <PredictionStream predictions={predictions} />
       </Drawer>
-      <Drawer side="right" open={rightOpen} onClose={() => setRightOpen(false)} title="Trading Agent">
+      <Drawer
+        side="right"
+        open={rightOpen}
+        onClose={() => setRightOpen(false)}
+        title="Trading Agent"
+      >
         <TradingConsole
           autoTrade={autoTrade}
           setAutoTrade={setAutoTrade}
